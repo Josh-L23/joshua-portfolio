@@ -1,0 +1,26 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="apollo1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f0f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1f1f1f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="apollo-grid" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="50" stroke="#d4af37" stroke-width="0.2" opacity="0.2"/>
+      <line x1="0" y1="0" x2="50" y2="0" stroke="#d4af37" stroke-width="0.2" opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="400" fill="url(#apollo1)"/>
+  <rect width="600" height="400" fill="url(#apollo-grid)"/>
+  
+  <!-- Abstract commerce visualization -->
+  <rect x="150" y="100" width="100" height="200" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  <rect x="250" y="150" width="100" height="150" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  <rect x="350" y="120" width="100" height="180" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- Data flow lines -->
+  <path d="M200,300 L300,150 L400,300" stroke="#d4af37" stroke-width="1" fill="none" opacity="0.2"/>
+  <circle cx="200" cy="300" r="3" fill="#d4af37" opacity="0.5"/>
+  <circle cx="300" cy="150" r="3" fill="#d4af37" opacity="0.5"/>
+  <circle cx="400" cy="300" r="3" fill="#d4af37" opacity="0.5"/>
+</svg>

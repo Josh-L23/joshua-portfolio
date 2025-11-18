@@ -1,0 +1,24 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nebula1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2d2d2d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0f0f;stop-opacity:1" />
+    </linearGradient>
+    <filter id="nebula-blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+    </filter>
+  </defs>
+  <rect width="600" height="400" fill="url(#nebula1)"/>
+  
+  <!-- Abstract nebula shapes -->
+  <circle cx="300" cy="200" r="120" fill="#d4af37" opacity="0.05" filter="url(#nebula-blur)"/>
+  <ellipse cx="400" cy="150" rx="80" ry="60" fill="#d4af37" opacity="0.03" transform="rotate(45 400 150)"/>
+  <path d="M100,100 Q200,300 300,100 T500,300" stroke="#d4af37" stroke-width="0.5" fill="none" opacity="0.2"/>
+  
+  <!-- Geometric elements -->
+  <polygon points="200,150 250,200 200,250 150,200" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="450" cy="250" r="3" fill="#d4af37" opacity="0.6"/>
+  <circle cx="150" cy="100" r="2" fill="#f7f3f0" opacity="0.4"/>
+  <circle cx="500" cy="350" r="2" fill="#f7f3f0" opacity="0.4"/>
+</svg>

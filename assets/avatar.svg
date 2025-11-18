@@ -1,0 +1,24 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2d2d2d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0f0f;stop-opacity:1" />
+    </linearGradient>
+    <filter id="avatarGrain">
+      <feTurbulence baseFrequency="0.9" numOctaves="4" seed="5"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/>
+    </filter>
+  </defs>
+  <rect width="200" height="200" fill="url(#avatarGrad)"/>
+  <rect width="200" height="200" fill="url(#avatarGrad)" filter="url(#avatarGrain)" opacity="0.5"/>
+  
+  <!-- Silhouette -->
+  <ellipse cx="100" cy="80" rx="40" ry="45" fill="#0a0a0a" opacity="0.9"/>
+  <path d="M100 110 C75 110 60 125 60 150 L60 200 L140 200 L140 150 C140 125 125 110 100 110 Z" fill="#0a0a0a" opacity="0.9"/>
+  
+  <!-- Abstract facial features -->
+  <line x1="80" y1="75" x2="90" y2="75" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  <line x1="110" y1="75" x2="120" y2="75" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+  <path d="M90 95 Q100 100 110 95" stroke="#d4af37" stroke-width="0.5" fill="none" opacity="0.3"/>
+</svg>

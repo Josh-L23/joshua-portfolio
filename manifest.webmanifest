@@ -1,0 +1,18 @@
+{
+  "name": "Joshua — Portfolio",
+  "short_name": "Joshua",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0b11",
+  "theme_color": "#0b0b11",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
+

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b11">
+    <title>Joshua — Portfolio</title>
+    <meta name="title" content="Joshua — Portfolio">
+    <meta name="description" content="Engineer & designer crafting delightful, high-performance experiences. Explore selected work, experiments and thoughts.">
+    <link rel="canonical" href="https://example.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com/">
+    <meta property="og:title" content="Joshua — Portfolio">
+    <meta property="og:description" content="Engineer & designer crafting delightful, high-performance experiences.">
+    <meta property="og:image" content="/assets/og-image.svg">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Joshua — Portfolio">
+    <meta name="twitter:description" content="Engineer & designer crafting delightful, high-performance experiences.">
+    <meta name="twitter:image" content="/assets/og-image.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Icons & manifest -->
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/favicon.svg">
+    <link rel="mask-icon" href="/assets/favicon.svg" color="#5bbad5">
+    <link rel="manifest" href="/manifest.webmanifest">
+
+    <link rel="stylesheet" href="/src/styles.css">
+  </head>
+  <body class="loading">
+    <!-- Loading overlay -->
+    <div class="loader-overlay">
+      <div class="loader"></div>
+    </div>
+    
+    <a class="skip-link" href="#content">Skip to content</a>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header" role="banner">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="/" aria-label="Home">
+          <span class="brand-mark" aria-hidden="true">◆</span>
+          <span class="brand-text">Joshua&middot;L</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#work">Work</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+          <span class="sun" aria-hidden="true">☀</span>
+          <span class="moon" aria-hidden="true">🌙</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Floating Glass Navigation -->
+    <nav class="floating-nav" aria-label="Floating navigation">
+      <div class="floating-nav-inner">
+        <ul class="floating-links">
+          <li><a href="#work" data-text="Work">Work</a></li>
+          <li><a href="#services" data-text="Services">Services</a></li>
+          <li><a href="#about" data-text="About">About</a></li>
+          <li><a href="#experience" data-text="Experience">Experience</a></li>
+          <li><a href="#contact" data-text="Contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main id="content" class="content">
+      <section class="hero" aria-label="Intro">
+        <div class="hero-inner">
+          <p class="eyebrow" data-split-text>Jr.Systems Developer</p>
+          <h1 class="headline">
+            <span class="line">Crafting</span>
+            <span class="line"><span class="accent">Breathtaking</span></span>
+            <span class="line">Digital</span>
+            <span class="line">Experiences</span>
+          </h1>
+          <p class="subtitle" data-fade>
+            I blend engineering precision with design elegance to create 
+            unforgettable digital moments. Currently accepting select projects.
+          </p>
+          <div class="cta-row" data-fade>
+            <a class="button primary magnetic" href="#work">View Portfolio</a>
+            <a class="button ghost magnetic" href="#contact">Start a Project</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-image" data-parallax>
+            <img src="/assets/portrait.jpeg" alt="Abstract portrait" />
+          </div>
+        </div>
+      </section>
+
+      <section id="work" class="section" aria-labelledby="work-title">
+        <div class="section-header">
+          <h2 id="work-title">Selected work</h2>
+          <p class="section-subtitle">Handpicked projects that blend utility and delight.</p>
+        </div>
+        <div class="projects">
+          <article class="card project" data-tilt>
+            <a href="#" class="card-media" aria-label="Project Nebula">
+              <img src="/assets/project-1.svg" alt="Nebula abstract visualization" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <h3>Project TruthLens</h3>
+              <p>Social Media Platform with powerful fact checking algorithms.</p>
+              <ul class="tags">
+                <li>React</li><li>RAG</li><li>TypeScript</li><li>Tailwind</li>
+              </ul>
+            </div>
+          </article>
+          <article class="card project" data-tilt>
+            <a href="#" class="card-media" aria-label="Project Apollo">
+              <img src="/assets/project-2.svg" alt="Apollo abstract visualization" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <h3>Student Planner App</h3>
+              <p>A student productivity app packed with essential tools to improve performance. featuring AI powered study assistants, QA, and flashcard generation</p>
+              <ul class="tags">
+                <li>Node.js</li><li>React</li><li>Postgres</li>
+              </ul>
+            </div>
+          </article>
+          <article class="card project" data-tilt>
+            <a href="#" class="card-media" aria-label="Project Orion">
+              <img src="/assets/project-3.svg" alt="Orion abstract visualization" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <h3>Blog-Sites</h3>
+              <p>Tailer made blogs for multiple content creators.</p>
+              <ul class="tags">
+                <li>Design</li><li>CMS</li><li>Deployment</li><li>SEO</li>
+              </ul>
+            </div>
+          </article>
+          <article class="card project" data-tilt>
+            <a href="#" class="card-media" aria-label="Project Pulsar">
+              <img src="/assets/project-4.svg" alt="Pulsar abstract visualization" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <h3>Eighteen-Eighteen</h3>
+              <p>In Development.</p>
+              <ul class="tags">
+                <li>FinTech</li><li>exposure</li><li>Web</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="services" class="section" aria-labelledby="services-title">
+        <div class="section-header offset-header">
+          <h2 id="services-title" class="split-heading">What I do</h2>
+          <p class="section-subtitle">I design and build focused digital experiences for students, creators, and early‑stage products.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card large" data-tilt>
+            <span class="service-number">01</span>
+            <h3>AI‑first product design</h3>
+            <p>Translating messy ideas into clear, honest interfaces for AI‑powered tools like TruthLens and student productivity apps.</p>
+            <ul class="service-list">
+              <li>UX for AI tools</li>
+              <li>Flows & wireframes</li>
+              <li>Rapid prototyping</li>
+            </ul>
+          </article>
+          <article class="service-card" data-tilt>
+            <span class="service-number">02</span>
+            <h3>Full‑stack development</h3>
+            <p>Building reliable web apps from the ground up – from the React frontend to Node.js APIs and Postgres data layers.</p>
+            <ul class="service-list">
+              <li>React frontends</li>
+              <li>Node.js APIs</li>
+              <li>Postgres & auth</li>
+            </ul>
+          </article>
+          <article class="service-card" data-tilt>
+            <span class="service-number">03</span>
+            <h3>Creator & brand sites</h3>
+            <p>Tailored sites for portfolios, blogs, and communities with a focus on storytelling, clarity, and performance.</p>
+            <ul class="service-list">
+              <li>Blogs & CMS</li>
+              <li>Portfolio design</li>
+              <li>SEO foundations</li>
+            </ul>
+          </article>
+          <article class="service-card wide" data-tilt>
+            <span class="service-number">04</span>
+            <h3>Systems & experimentation</h3>
+            <p>Exploring new ideas like FinTech products and AI fact‑checking systems through prototypes, experiments, and iteration.</p>
+            <ul class="service-list">
+              <li>RAG & data pipelines</li>
+              <li>FinTech concepts</li>
+              <li>Performance insight</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="about" class="section diagonal-section" aria-labelledby="about-title">
+        <div class="section-header">
+          <h2 id="about-title">About</h2>
+          <p class="section-subtitle">A systems‑minded developer building grounded products for real people.</p>
+        </div>
+        <div class="about">
+          <img class="avatar" src="/assets/desktop.jpeg" width="160" height="160" alt="Portrait of Joshua">
+          <div class="about-copy">
+            <p>I’m a junior systems and frontend developer at The Code Collective, working on products like TruthLens (an AI‑powered fact checking platform), student productivity tools, and tailored sites for creators. I enjoy taking ambiguous ideas and shaping them into opinionated, reliable experiences.</p>
+            <p>Most of my work lives where clean interfaces meet real‑world complexity – from RAG‑driven assistants to FinTech concepts. I care about clarity, trust, and building things that actually get used, not just shipped.</p>
+            <ul class="skills">
+              <li>React</li><li>TypeScript</li><li>Node.js</li><li>Postgres</li><li>RAG / AI</li><li>UX & content design</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" class="section" aria-labelledby="exp-title">
+        <div class="section-header offset-header">
+          <h2 id="exp-title">Experience</h2>
+          <p class="section-subtitle">A journey through impactful roles and projects.</p>
+        </div>
+        <div class="experience-grid">
+          <article class="experience-card large" data-tilt>
+            <div class="circle-content">
+              <span class="year">Sept&middot;2025</span>
+              <h3>Frontend Engineer</h3>
+              <span class="company">The Code Collective</span>
+              <p>Built seamless user interface for student productivity Platform.</p>
+              <ul class="tech-stack">
+                <li>React</li>
+                <li>Node.js</li>
+                <li>TypeScript</li>
+              </ul>
+            </div>
+          </article>
+          <article class="experience-card" data-tilt>
+            <div class="circle-content">
+              <span class="year">Oct&middot;2025</span>
+              <h3>Systems Engineer</h3>
+              <span class="company">The Code Collective</span>
+              <p>Contributing in development of AI powered fact checking and verification system.</p>
+              <ul class="tech-stack">
+                <li>JavaScript</li>
+                <li>Postgres</li>
+                <li>RAG</li>
+              </ul>
+            </div>
+          </article>
+          <article class="experience-card" data-tilt>
+            <div class="circle-content">
+              <span class="year">July&middot;2025</span>
+              <h3>Web Designer</h3>
+              <span class="company">Freelance</span>
+              <p>Built portfolio website for The Code Collective</p>
+              <ul class="tech-stack">
+                <li>HTML</li>
+                <li>JavaScript</li>
+                <li>CSS</li>
+              </ul>
+            </div>
+          </article>
+          <article class="experience-card wide" data-tilt>
+            <div class="circle-content">
+              <span class="year">June&middot;2025</span>
+              <h3>Junior Developer</h3>
+              <span class="company">Startup Founder: The Code Collective</span>
+              <p>Learned by building real products in a fast-paced environment.</p>
+              <ul class="tech-stack">
+                <li>JavaScript</li>
+                <li>Java</li>
+                <li>Html</li>
+                <li>CSS</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="section" aria-labelledby="contact-title">
+        <div class="section-header">
+          <h2 id="contact-title">Contact</h2>
+          <p class="section-subtitle">Have a project, idea, or role in mind? Let’s talk.</p>
+        </div>
+        <form class="contact" id="contactForm" action="mailto:hello@example.com" method="POST" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me a little about your project…" required></textarea>
+          </div>
+          <div class="actions">
+            <button class="button primary magnetic" type="submit">Send message</button>
+            <p class="privacy">No spam. Your info is only used to reply.</p>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-inner">
+        <ul class="social">
+          <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:hello@example.com">Email</a></li>
+        </ul>
+        <p class="copyright">© <span id="year"></span> Joshua. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Vendor scripts via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <!-- App -->
+    <script src="/src/app.js"></script>
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Joshua",
+      "url": "https://example.com/",
+      "jobTitle": "Product Engineer",
+      "sameAs": [
+        "https://github.com/",
+        "https://www.linkedin.com/"
+      ]
+    }
+    </script>
+  </body>
+</html>
+
+
