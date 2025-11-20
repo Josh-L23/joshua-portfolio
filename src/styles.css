@@ -1330,6 +1330,7 @@ textarea {
   gap: var(--space-md);
   list-style: none;
   margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .social a {
@@ -1338,24 +1339,35 @@ textarea {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(247, 243, 240, 0.1);
+  border-radius: 100px;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out-expo);
+  display: inline-block;
+  color: rgba(247, 243, 240, 0.7);
 }
 
-.social a::after {
+.social a::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 1px;
-  background: var(--color-gold);
-  transition: width 0.3s var(--ease-out-expo);
+  inset: 0;
+  background: var(--color-ivory);
+  transform: translateY(100%);
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: -1;
 }
 
-.social a:hover::after {
-  width: 100%;
+.social a:hover {
+  color: var(--color-black);
+  border-color: var(--color-ivory);
+  transform: translateY(-2px);
 }
+
+.social a:hover::before {
+  transform: translateY(0);
+}
+
 
 .copyright {
   font-size: 0.875rem;
@@ -1511,6 +1523,24 @@ textarea {
   .avatar {
     max-width: 200px;
     margin: 0 auto;
+  }
+
+  .social {
+    gap: var(--space-sm);
+  }
+
+  .social a {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Mobile-specific active state for social links */
+  .social a:active {
+    transform: scale(0.95);
+    background: var(--color-ivory);
+    color: var(--color-black);
   }
 }
 
