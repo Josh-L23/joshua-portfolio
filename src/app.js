@@ -621,7 +621,7 @@ function initializePortfolio() {
   // Set Current Year
   // ========================================
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  // document.getElementById('year').textContent = new Date().getFullYear();
   
   // ========================================
   // Remove loading state
