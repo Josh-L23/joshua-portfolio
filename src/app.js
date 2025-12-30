@@ -2,32 +2,160 @@
 // Luxe Dark Portfolio - Interactive Elements
 // ========================================
 
-// Function to initialize everything
+// Configuration Constants
+const CONFIG = {
+  // Cursor animation
+  CURSOR_SMOOTHING_OUTER: 0.15,
+  CURSOR_SMOOTHING_INNER: 0.5,
+  
+  // Magnetic effect
+  MAGNETIC_DISTANCE_THRESHOLD: 100,
+  MAGNETIC_TRANSLATE_MULTIPLIER: 0.3,
+  
+  // Scroll
+  SCROLL_THRESHOLD: 300,
+  SCROLL_OFFSET: 200,
+  SCROLL_DURATION: 1.5,
+  SCROLL_OFFSET_ANCHOR: -100,
+  
+  // Lenis smooth scroll
+  LENIS_DURATION: 1.2,
+  LENIS_MOUSE_MULTIPLIER: 1,
+  LENIS_TOUCH_MULTIPLIER: 2,
+  
+  // Tilt effect
+  TILT_ROTATION_MULTIPLIER: 10,
+  TILT_ANIMATION_DURATION: 0.5,
+  TILT_PERSPECTIVE: 1000,
+  
+  // GSAP animations
+  ANIMATION_DURATION_SHORT: 0.6,
+  ANIMATION_DURATION_MEDIUM: 1,
+  ANIMATION_DURATION_LONG: 1.2,
+  ANIMATION_DURATION_EXTRA_LONG: 1.5,
+  ANIMATION_STAGGER_AMOUNT: 0.8,
+  ANIMATION_STAGGER_DELAY: 0.1,
+  ANIMATION_STAGGER_PROJECT: 0.2,
+  
+  // Three.js particles
+  PARTICLE_COUNT: 1000,
+  PARTICLE_SPREAD: 10,
+  PARTICLE_SIZE: 0.02,
+  PARTICLE_OPACITY: 0.6,
+  PARTICLE_ROTATION_SPEED_Y: 0.05,
+  PARTICLE_ROTATION_SPEED_X: 0.03,
+  CAMERA_DISTANCE: 3,
+  CAMERA_PARALLAX_MULTIPLIER: 0.5,
+  
+  // Form submission
+  FORM_SUBMIT_DELAY: 2000,
+  FORM_SUCCESS_DISPLAY_TIME: 3000,
+  
+  // Initialization delays
+  INIT_DELAY_SHORT: 100,
+  INIT_DELAY_MEDIUM: 500,
+  INIT_DELAY_LONG: 2000,
+  
+  // Scroll trigger positions
+  SCROLL_TRIGGER_START_TOP: 'top 80%',
+  SCROLL_TRIGGER_START_70: 'top 70%',
+  SCROLL_TRIGGER_END: 'top 20%',
+  SCROLL_TRIGGER_LEFT: 'left 80%',
+  
+  // Animation easing
+  EASING_POWER2: 'power2.out',
+  EASING_POWER3: 'power3.out',
+  EASING_POWER4: 'power4.out',
+  EASING_BACK: 'back.out(1.2)',
+  EASING_BACK_STRONG: 'back.out(1.7)',
+  
+  // Scale values
+  SCALE_SMALL: 0.8,
+  SCALE_NORMAL: 0.9,
+  SCALE_LARGE: 0.98,
+  SCALE_FULL: 1,
+  
+  // Opacity values
+  OPACITY_HIDDEN: 0,
+  OPACITY_VISIBLE: 1,
+  OPACITY_SEMI: 0.8,
+  
+  // Rotation values
+  ROTATION_START: -180,
+  ROTATION_END: 0,
+  
+  // Liquid ripple
+  RIPPLE_REMOVE_DELAY: 600
+};
+
+/**
+ * Initialize 3D tilt effect on an element
+ * @param {HTMLElement} element - The element to apply tilt effect to
+ */
+function initTiltEffect(element) {
+  element.addEventListener('mousemove', (e) => {
+    const rect = element.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const percentX = (x - centerX) / centerX;
+    const percentY = (y - centerY) / centerY;
+    
+    const rotateX = percentY * CONFIG.TILT_ROTATION_MULTIPLIER;
+    const rotateY = percentX * -CONFIG.TILT_ROTATION_MULTIPLIER;
+    
+    gsap.to(element, {
+      rotateX: rotateX,
+      rotateY: rotateY,
+      duration: CONFIG.TILT_ANIMATION_DURATION,
+      ease: CONFIG.EASING_POWER2,
+      transformPerspective: CONFIG.TILT_PERSPECTIVE
+    });
+  });
+  
+  element.addEventListener('mouseleave', () => {
+    gsap.to(element, {
+      rotateX: CONFIG.ROTATION_END,
+      rotateY: CONFIG.ROTATION_END,
+      duration: CONFIG.TILT_ANIMATION_DURATION,
+      ease: CONFIG.EASING_POWER2
+    });
+  });
+}
+
+/**
+ * Main initialization function for the portfolio
+ * Initializes all interactive elements, animations, and effects
+ * @returns {void}
+ */
 function initializePortfolio() {
   if (window.portfolioInitialized) {
-    console.log('Portfolio already initialized');
     return;
   }
   window.portfolioInitialized = true;
-  console.log('Initializing portfolio...');
   // Initialize smooth scroll with Lenis
-  const lenis = new Lenis({
-    duration: 1.2,
+  let lenis = null;
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+    duration: CONFIG.LENIS_DURATION,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     direction: 'vertical',
     gestureDirection: 'vertical',
     smooth: true,
-    mouseMultiplier: 1,
+    mouseMultiplier: CONFIG.LENIS_MOUSE_MULTIPLIER,
     smoothTouch: false,
-    touchMultiplier: 2,
+    touchMultiplier: CONFIG.LENIS_TOUCH_MULTIPLIER,
     infinite: false,
-  });
-
-  function raf(time) {
-    lenis.raf(time);
+    });
+    
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
     requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
 
   // ========================================
   // Custom Cursor
@@ -52,17 +180,20 @@ function initializePortfolio() {
     mouseY = e.clientY;
   });
 
-  // Smooth cursor animation
+  /**
+   * Animates the custom cursor with smooth interpolation
+   * @returns {void}
+   */
   function animateCursor() {
     // Outer cursor
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
+    cursorX += (mouseX - cursorX) * CONFIG.CURSOR_SMOOTHING_OUTER;
+    cursorY += (mouseY - cursorY) * CONFIG.CURSOR_SMOOTHING_OUTER;
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
 
     // Inner dot
-    dotX += (mouseX - dotX) * 0.5;
-    dotY += (mouseY - dotY) * 0.5;
+    dotX += (mouseX - dotX) * CONFIG.CURSOR_SMOOTHING_INNER;
+    dotY += (mouseY - dotY) * CONFIG.CURSOR_SMOOTHING_INNER;
     cursorDot.style.left = dotX + 'px';
     cursorDot.style.top = dotY + 'px';
 
@@ -104,9 +235,9 @@ function initializePortfolio() {
       const distY = e.clientY - centerY;
       const distance = Math.sqrt(distX * distX + distY * distY);
       
-      if (distance < 100) {
-        const translateX = distX * 0.3;
-        const translateY = distY * 0.3;
+      if (distance < CONFIG.MAGNETIC_DISTANCE_THRESHOLD) {
+        const translateX = distX * CONFIG.MAGNETIC_TRANSLATE_MULTIPLIER;
+        const translateY = distY * CONFIG.MAGNETIC_TRANSLATE_MULTIPLIER;
         el.style.transform = `translate(${translateX}px, ${translateY}px)`;
       }
     });
@@ -123,21 +254,20 @@ function initializePortfolio() {
   const header = document.querySelector('.site-header');
   const floatingNav = document.querySelector('.floating-nav');
   const floatingLinks = document.querySelectorAll('.floating-links a');
-  let lastScrollY = 0;
-  const scrollThreshold = 300; // When to trigger the morph
   
-  // Debug: Check if elements exist
-  console.log('Header found:', !!header);
-  console.log('Floating nav found:', !!floatingNav);
-  console.log('Floating links found:', floatingLinks.length);
+  let lastScrollY = 0;
+  const scrollThreshold = CONFIG.SCROLL_THRESHOLD;
 
-  // Update active link based on scroll position
+  /**
+   * Updates the active navigation link based on current scroll position
+   * @returns {void}
+   */
   function updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
     const scrollY = window.scrollY;
 
     sections.forEach(section => {
-      const sectionTop = section.offsetTop - 200;
+      const sectionTop = section.offsetTop - CONFIG.SCROLL_OFFSET;
       const sectionHeight = section.offsetHeight;
       const sectionId = section.getAttribute('id');
       
@@ -152,8 +282,15 @@ function initializePortfolio() {
     });
   }
 
-  // Handle scroll with both Lenis and regular scroll
+  /**
+   * Handles scroll events to morph header into floating navigation
+   * @returns {void}
+   */
   function handleScroll() {
+    if (!header || !floatingNav) {
+      return; // Skip if elements not available
+    }
+    
     const scroll = window.pageYOffset || document.documentElement.scrollTop;
     
     // Handle header morph
@@ -174,7 +311,7 @@ function initializePortfolio() {
   }
 
   // Try to use Lenis if available, fallback to window scroll
-  if (typeof lenis !== 'undefined' && lenis.on) {
+  if (lenis && lenis.on) {
     lenis.on('scroll', ({ scroll }) => {
       handleScroll();
     });
@@ -185,15 +322,6 @@ function initializePortfolio() {
   
   // Initial check
   handleScroll();
-  
-  // Manual test: Add keyboard shortcut to toggle floating nav (press 'T' to test)
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 't' || e.key === 'T') {
-      console.log('Testing floating nav toggle');
-      floatingNav.classList.toggle('visible');
-      header.classList.toggle('fade-out');
-    }
-  });
 
   // Add liquid ripple effect on hover
   floatingLinks.forEach(link => {
@@ -202,7 +330,7 @@ function initializePortfolio() {
       ripple.className = 'liquid-ripple';
       this.appendChild(ripple);
       
-      setTimeout(() => ripple.remove(), 600);
+      setTimeout(() => ripple.remove(), CONFIG.RIPPLE_REMOVE_DELAY);
     });
   });
 
@@ -239,36 +367,7 @@ function initializePortfolio() {
     // Re-initialize tilt effect on cloned cards
     const allCards = track.querySelectorAll('[data-tilt]');
     allCards.forEach(element => {
-      element.addEventListener('mousemove', (e) => {
-        const rect = element.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const percentX = (x - centerX) / centerX;
-        const percentY = (y - centerY) / centerY;
-        
-        const rotateX = percentY * 10;
-        const rotateY = percentX * -10;
-        
-        gsap.to(element, {
-          rotateX: rotateX,
-          rotateY: rotateY,
-          duration: 0.5,
-          ease: 'power2.out',
-          transformPerspective: 1000
-        });
-      });
-      
-      element.addEventListener('mouseleave', () => {
-        gsap.to(element, {
-          rotateX: 0,
-          rotateY: 0,
-          duration: 0.5,
-          ease: 'power2.out'
-        });
-      });
+      initTiltEffect(element);
     });
     
     // Optional: Add manual control on click
@@ -277,34 +376,31 @@ function initializePortfolio() {
       isPaused = !isPaused;
       track.style.animationPlayState = isPaused ? 'paused' : 'running';
     });
-    
-    console.log('Infinite auto-scroll initialized for projects');
-  } else {
-    console.warn('Projects container not found');
   }
 
   // ========================================
   // GSAP Animations
   // ========================================
 
-  gsap.registerPlugin(ScrollTrigger);
-
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  
   // Parallax for sections
   gsap.utils.toArray('.section').forEach(section => {
     const content = section.querySelector('.section-header');
     if (content) {
       gsap.fromTo(content, 
-        { y: 100, opacity: 0 },
+        { y: 100, opacity: CONFIG.OPACITY_HIDDEN },
         {
-          y: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power3.out',
+          y: CONFIG.ROTATION_END,
+          opacity: CONFIG.OPACITY_VISIBLE,
+          duration: CONFIG.ANIMATION_DURATION_EXTRA_LONG,
+          ease: CONFIG.EASING_POWER3,
           scrollTrigger: {
             trigger: section,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 1
+            start: CONFIG.SCROLL_TRIGGER_START_TOP,
+            end: CONFIG.SCROLL_TRIGGER_END,
+            scrub: CONFIG.LENIS_MOUSE_MULTIPLIER
           }
         }
       );
@@ -313,36 +409,36 @@ function initializePortfolio() {
 
   // Service cards stagger animation
   gsap.fromTo('.service-card',
-    { y: 100, opacity: 0, scale: 0.9 },
+    { y: 100, opacity: CONFIG.OPACITY_HIDDEN, scale: CONFIG.SCALE_NORMAL },
     {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      duration: 1.2,
+      y: CONFIG.ROTATION_END,
+      opacity: CONFIG.OPACITY_VISIBLE,
+      scale: CONFIG.SCALE_FULL,
+      duration: CONFIG.ANIMATION_DURATION_LONG,
       stagger: {
-        amount: 0.8,
+        amount: CONFIG.ANIMATION_STAGGER_AMOUNT,
         from: "random"
       },
-      ease: 'power3.out',
+      ease: CONFIG.EASING_POWER3,
       scrollTrigger: {
         trigger: '.services-grid',
-        start: 'top 70%'
+        start: CONFIG.SCROLL_TRIGGER_START_70
       }
     }
   );
 
   // Project cards horizontal reveal
   gsap.fromTo('.project',
-    { scale: 0.8, opacity: 0 },
+    { scale: CONFIG.SCALE_SMALL, opacity: CONFIG.OPACITY_HIDDEN },
     {
-      scale: 1,
-      opacity: 1,
-      duration: 1,
-      stagger: 0.2,
-      ease: 'power3.out',
+      scale: CONFIG.SCALE_FULL,
+      opacity: CONFIG.OPACITY_VISIBLE,
+      duration: CONFIG.ANIMATION_DURATION_MEDIUM,
+      stagger: CONFIG.ANIMATION_STAGGER_PROJECT,
+      ease: CONFIG.EASING_POWER3,
       scrollTrigger: {
         trigger: '.projects',
-        start: 'left 80%',
+        start: CONFIG.SCROLL_TRIGGER_LEFT,
         horizontal: true
       }
     }
@@ -350,36 +446,36 @@ function initializePortfolio() {
 
   // Experience cards stagger animation
   gsap.fromTo('.experience-card',
-    { scale: 0, opacity: 0, rotation: -180 },
+    { scale: CONFIG.ROTATION_END, opacity: CONFIG.OPACITY_HIDDEN, rotation: CONFIG.ROTATION_START },
     {
-      scale: 1,
-      opacity: 1,
-      rotation: 0,
-      duration: 1.2,
+      scale: CONFIG.SCALE_FULL,
+      opacity: CONFIG.OPACITY_VISIBLE,
+      rotation: CONFIG.ROTATION_END,
+      duration: CONFIG.ANIMATION_DURATION_LONG,
       stagger: {
-        amount: 0.8,
+        amount: CONFIG.ANIMATION_STAGGER_AMOUNT,
         from: "center"
       },
-      ease: 'back.out(1.2)',
+      ease: CONFIG.EASING_BACK,
       scrollTrigger: {
         trigger: '.experience-grid',
-        start: 'top 70%'
+        start: CONFIG.SCROLL_TRIGGER_START_70
       }
     }
   );
 
   // Skills animation
   gsap.fromTo('.skills li',
-    { scale: 0.8, opacity: 0 },
+    { scale: CONFIG.SCALE_SMALL, opacity: CONFIG.OPACITY_HIDDEN },
     {
-      scale: 1,
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'back.out(1.7)',
+      scale: CONFIG.SCALE_FULL,
+      opacity: CONFIG.OPACITY_VISIBLE,
+      duration: CONFIG.ANIMATION_DURATION_SHORT,
+      stagger: CONFIG.ANIMATION_STAGGER_DELAY,
+      ease: CONFIG.EASING_BACK_STRONG,
       scrollTrigger: {
         trigger: '.skills',
-        start: 'top 80%'
+        start: CONFIG.SCROLL_TRIGGER_START_TOP
       }
     }
   );
@@ -389,27 +485,29 @@ function initializePortfolio() {
     gsap.fromTo(heading,
       { 
         clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)',
-        opacity: 0
+        opacity: CONFIG.OPACITY_HIDDEN
       },
       {
         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power4.out',
+        opacity: CONFIG.OPACITY_VISIBLE,
+        duration: CONFIG.ANIMATION_DURATION_EXTRA_LONG,
+        ease: CONFIG.EASING_POWER4,
         scrollTrigger: {
           trigger: heading,
-          start: 'top 80%'
+          start: CONFIG.SCROLL_TRIGGER_START_TOP
         }
       }
     );
   });
+  }
 
   // ========================================
   // Three.js Background
   // ========================================
 
   const canvas = document.getElementById('bg-canvas');
-  const scene = new THREE.Scene();
+  if (canvas && typeof THREE !== 'undefined') {
+    const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   
@@ -418,14 +516,14 @@ function initializePortfolio() {
 
   // Create particle field
   const particlesGeometry = new THREE.BufferGeometry();
-  const count = 1000;
+  const count = CONFIG.PARTICLE_COUNT;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
 
   for (let i = 0; i < count * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 10;
-    positions[i + 1] = (Math.random() - 0.5) * 10;
-    positions[i + 2] = (Math.random() - 0.5) * 10;
+    positions[i] = (Math.random() - 0.5) * CONFIG.PARTICLE_SPREAD;
+    positions[i + 1] = (Math.random() - 0.5) * CONFIG.PARTICLE_SPREAD;
+    positions[i + 2] = (Math.random() - 0.5) * CONFIG.PARTICLE_SPREAD;
     
     // Gold tinted particles
     colors[i] = 0.831; // R
@@ -437,18 +535,18 @@ function initializePortfolio() {
   particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   const particlesMaterial = new THREE.PointsMaterial({
-    size: 0.02,
+    size: CONFIG.PARTICLE_SIZE,
     sizeAttenuation: true,
     vertexColors: true,
     blending: THREE.AdditiveBlending,
     transparent: true,
-    opacity: 0.6
+    opacity: CONFIG.PARTICLE_OPACITY
   });
 
   const particles = new THREE.Points(particlesGeometry, particlesMaterial);
   scene.add(particles);
 
-  camera.position.z = 3;
+  camera.position.z = CONFIG.CAMERA_DISTANCE;
 
   // Mouse parallax
   let mouseXRatio = 0;
@@ -462,16 +560,20 @@ function initializePortfolio() {
   // Animation loop
   const clock = new THREE.Clock();
 
+  /**
+   * Three.js animation loop for particle system
+   * @returns {void}
+   */
   function animate() {
     const elapsedTime = clock.getElapsedTime();
 
     // Rotate particles
-    particles.rotation.y = elapsedTime * 0.05;
-    particles.rotation.x = elapsedTime * 0.03;
+    particles.rotation.y = elapsedTime * CONFIG.PARTICLE_ROTATION_SPEED_Y;
+    particles.rotation.x = elapsedTime * CONFIG.PARTICLE_ROTATION_SPEED_X;
 
     // Mouse parallax
-    camera.position.x = mouseXRatio * 0.5;
-    camera.position.y = -mouseYRatio * 0.5;
+    camera.position.x = mouseXRatio * CONFIG.CAMERA_PARALLAX_MULTIPLIER;
+    camera.position.y = -mouseYRatio * CONFIG.CAMERA_PARALLAX_MULTIPLIER;
     camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
@@ -479,21 +581,23 @@ function initializePortfolio() {
   }
   animate();
 
-  // Handle resize
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+    // Handle resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
 
   // ========================================
   // Form Handling
   // ========================================
 
   const form = document.getElementById('contactForm');
-  const submitButton = form.querySelector('button[type="submit"]');
-
-  form.addEventListener('submit', (e) => {
+  if (form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     // Add loading state
@@ -508,9 +612,11 @@ function initializePortfolio() {
       setTimeout(() => {
         submitButton.textContent = 'Send message';
         submitButton.disabled = false;
-      }, 3000);
-    }, 2000);
-  });
+      }, CONFIG.FORM_SUCCESS_DISPLAY_TIME);
+    }, CONFIG.FORM_SUBMIT_DELAY);
+      });
+    }
+  }
 
   // ========================================
   // Smooth Anchor Links
@@ -523,14 +629,16 @@ function initializePortfolio() {
       if (target) {
         // Add a subtle scale animation to the target section
         gsap.fromTo(target, 
-          { scale: 0.98, opacity: 0.8 },
-          { scale: 1, opacity: 1, duration: 1, ease: 'power2.out' }
+          { scale: CONFIG.SCALE_LARGE, opacity: CONFIG.OPACITY_SEMI },
+          { scale: CONFIG.SCALE_FULL, opacity: CONFIG.OPACITY_VISIBLE, duration: CONFIG.ANIMATION_DURATION_MEDIUM, ease: CONFIG.EASING_POWER2 }
         );
         
-        lenis.scrollTo(target, {
-          offset: -100,
-          duration: 1.5
-        });
+        if (lenis) {
+          lenis.scrollTo(target, {
+            offset: CONFIG.SCROLL_OFFSET_ANCHOR,
+            duration: CONFIG.ANIMATION_DURATION_EXTRA_LONG
+          });
+        }
       }
     });
   });
@@ -558,38 +666,8 @@ function initializePortfolio() {
   // ========================================
 
   const tiltElements = document.querySelectorAll('[data-tilt]');
-  
   tiltElements.forEach(element => {
-    element.addEventListener('mousemove', (e) => {
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      const percentX = (x - centerX) / centerX;
-      const percentY = (y - centerY) / centerY;
-      
-      const rotateX = percentY * 10;
-      const rotateY = percentX * -10;
-      
-      gsap.to(element, {
-        rotateX: rotateX,
-        rotateY: rotateY,
-        duration: 0.5,
-        ease: 'power2.out',
-        transformPerspective: 1000
-      });
-    });
-    
-    element.addEventListener('mouseleave', () => {
-      gsap.to(element, {
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.5,
-        ease: 'power2.out'
-      });
-    });
+    initTiltEffect(element);
   });
 
   // ========================================
@@ -604,15 +682,15 @@ function initializePortfolio() {
     const centerY = window.innerHeight / 2;
     
     parallaxElements.forEach(element => {
-      const speed = element.dataset.parallaxSpeed || 0.5;
+      const speed = element.dataset.parallaxSpeed || CONFIG.CAMERA_PARALLAX_MULTIPLIER;
       const x = (clientX - centerX) * speed;
       const y = (clientY - centerY) * speed;
       
       gsap.to(element, {
         x: x,
         y: y,
-        duration: 1,
-        ease: 'power2.out'
+        duration: CONFIG.ANIMATION_DURATION_MEDIUM,
+        ease: CONFIG.EASING_POWER2
       });
     });
   });
@@ -621,7 +699,10 @@ function initializePortfolio() {
   // Set Current Year
   // ========================================
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearElement = document.getElementById('year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
   
   // ========================================
   // Remove loading state
@@ -630,40 +711,24 @@ function initializePortfolio() {
   // Remove loading class after a short delay to ensure everything is rendered
   setTimeout(() => {
     document.body.classList.remove('loading');
-    console.log('Loading complete, site ready');
-  }, 500);
+  }, CONFIG.INIT_DELAY_MEDIUM);
 }
 
 // Wait for all scripts to load
 window.addEventListener('load', () => {
-  console.log('Window loaded, checking for libraries...');
-  
-  // Check if required libraries are loaded
-  if (typeof Lenis === 'undefined') {
-    console.error('Lenis not loaded!');
-  }
-  if (typeof gsap === 'undefined') {
-    console.error('GSAP not loaded!');
-  }
-  if (typeof THREE === 'undefined') {
-    console.error('Three.js not loaded!');
-  }
-  
   // Initialize after a small delay to ensure everything is ready
   setTimeout(() => {
     initializePortfolio();
-  }, 100);
+  }, CONFIG.INIT_DELAY_SHORT);
 });
 
 // Also try DOMContentLoaded as a fallback
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded');
-  // If window.load hasn't fired after 2 seconds, initialize anyway
+  // If window.load hasn't fired after delay, initialize anyway
   setTimeout(() => {
     if (!window.portfolioInitialized) {
-      console.log('Fallback initialization');
       window.portfolioInitialized = true;
       initializePortfolio();
     }
-  }, 2000);
+  }, CONFIG.INIT_DELAY_LONG);
 });
