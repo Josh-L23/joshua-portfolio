@@ -88,10 +88,6 @@ const CONFIG = {
   RIPPLE_REMOVE_DELAY: 600
 };
 
-/**
- * Initialize 3D tilt effect on an element
- * @param {HTMLElement} element - The element to apply tilt effect to
- */
 function initTiltEffect(element) {
   element.addEventListener('mousemove', (e) => {
     const rect = element.getBoundingClientRect();
@@ -125,17 +121,11 @@ function initTiltEffect(element) {
   });
 }
 
-/**
- * Main initialization function for the portfolio
- * Initializes all interactive elements, animations, and effects
- * @returns {void}
- */
 function initializePortfolio() {
   if (window.portfolioInitialized) {
     return;
   }
   window.portfolioInitialized = true;
-  // Initialize smooth scroll with Lenis
   let lenis = null;
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
@@ -180,18 +170,12 @@ function initializePortfolio() {
     mouseY = e.clientY;
   });
 
-  /**
-   * Animates the custom cursor with smooth interpolation
-   * @returns {void}
-   */
   function animateCursor() {
-    // Outer cursor
     cursorX += (mouseX - cursorX) * CONFIG.CURSOR_SMOOTHING_OUTER;
     cursorY += (mouseY - cursorY) * CONFIG.CURSOR_SMOOTHING_OUTER;
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
 
-    // Inner dot
     dotX += (mouseX - dotX) * CONFIG.CURSOR_SMOOTHING_INNER;
     dotY += (mouseY - dotY) * CONFIG.CURSOR_SMOOTHING_INNER;
     cursorDot.style.left = dotX + 'px';
@@ -201,14 +185,12 @@ function initializePortfolio() {
   }
   animateCursor();
 
-  // Cursor hover effects
   const hoverElements = document.querySelectorAll('a, button, .magnetic');
   hoverElements.forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 
-  // Hide cursor when leaving window
   document.addEventListener('mouseleave', () => {
     cursor.style.opacity = '0';
     cursorDot.style.opacity = '0';
@@ -258,10 +240,6 @@ function initializePortfolio() {
   let lastScrollY = 0;
   const scrollThreshold = CONFIG.SCROLL_THRESHOLD;
 
-  /**
-   * Updates the active navigation link based on current scroll position
-   * @returns {void}
-   */
   function updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
     const scrollY = window.scrollY;
@@ -282,48 +260,35 @@ function initializePortfolio() {
     });
   }
 
-  /**
-   * Handles scroll events to morph header into floating navigation
-   * @returns {void}
-   */
   function handleScroll() {
     if (!header || !floatingNav) {
-      return; // Skip if elements not available
+      return;
     }
     
     const scroll = window.pageYOffset || document.documentElement.scrollTop;
     
-    // Handle header morph
     if (scroll > scrollThreshold) {
-      // Fade out main header, show floating nav
       header.classList.add('fade-out');
       floatingNav.classList.add('visible');
     } else {
-      // Show main header, hide floating nav
       header.classList.remove('fade-out');
       floatingNav.classList.remove('visible');
     }
 
-    // Update active link
     updateActiveLink();
     
     lastScrollY = scroll;
   }
 
-  // Try to use Lenis if available, fallback to window scroll
   if (lenis && lenis.on) {
     lenis.on('scroll', ({ scroll }) => {
       handleScroll();
     });
   }
   
-  // Also add regular scroll listener as fallback
   window.addEventListener('scroll', handleScroll);
-  
-  // Initial check
   handleScroll();
 
-  // Add liquid ripple effect on hover
   floatingLinks.forEach(link => {
     link.addEventListener('mouseenter', function(e) {
       const ripple = document.createElement('span');
@@ -341,36 +306,29 @@ function initializePortfolio() {
   const projectsContainer = document.querySelector('.projects');
   
   if (projectsContainer) {
-    // Clone all project cards for infinite scroll
     const projects = projectsContainer.querySelectorAll('.project');
     const projectsArray = Array.from(projects);
     
-    // Create a wrapper div for the scrolling track
     const track = document.createElement('div');
     track.className = 'projects-track';
     
-    // Move original projects to track
     projectsArray.forEach(project => {
       track.appendChild(project.cloneNode(true));
     });
     
-    // Clone projects again for seamless loop
     projectsArray.forEach(project => {
       const clone = project.cloneNode(true);
       track.appendChild(clone);
     });
     
-    // Clear container and add track
     projectsContainer.innerHTML = '';
     projectsContainer.appendChild(track);
     
-    // Re-initialize tilt effect on cloned cards
     const allCards = track.querySelectorAll('[data-tilt]');
     allCards.forEach(element => {
       initTiltEffect(element);
     });
     
-    // Optional: Add manual control on click
     let isPaused = false;
     projectsContainer.addEventListener('click', () => {
       isPaused = !isPaused;
@@ -514,7 +472,6 @@ function initializePortfolio() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Create particle field
   const particlesGeometry = new THREE.BufferGeometry();
   const count = CONFIG.PARTICLE_COUNT;
   const positions = new Float32Array(count * 3);
@@ -525,10 +482,9 @@ function initializePortfolio() {
     positions[i + 1] = (Math.random() - 0.5) * CONFIG.PARTICLE_SPREAD;
     positions[i + 2] = (Math.random() - 0.5) * CONFIG.PARTICLE_SPREAD;
     
-    // Gold tinted particles
-    colors[i] = 0.831; // R
-    colors[i + 1] = 0.686; // G
-    colors[i + 2] = 0.216; // B
+    colors[i] = 0.831;
+    colors[i + 1] = 0.686;
+    colors[i + 2] = 0.216;
   }
 
   particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -548,7 +504,6 @@ function initializePortfolio() {
 
   camera.position.z = CONFIG.CAMERA_DISTANCE;
 
-  // Mouse parallax
   let mouseXRatio = 0;
   let mouseYRatio = 0;
 
@@ -557,21 +512,14 @@ function initializePortfolio() {
     mouseYRatio = (e.clientY / window.innerHeight) - 0.5;
   });
 
-  // Animation loop
   const clock = new THREE.Clock();
 
-  /**
-   * Three.js animation loop for particle system
-   * @returns {void}
-   */
   function animate() {
     const elapsedTime = clock.getElapsedTime();
 
-    // Rotate particles
     particles.rotation.y = elapsedTime * CONFIG.PARTICLE_ROTATION_SPEED_Y;
     particles.rotation.x = elapsedTime * CONFIG.PARTICLE_ROTATION_SPEED_X;
 
-    // Mouse parallax
     camera.position.x = mouseXRatio * CONFIG.CAMERA_PARALLAX_MULTIPLIER;
     camera.position.y = -mouseYRatio * CONFIG.CAMERA_PARALLAX_MULTIPLIER;
     camera.lookAt(0, 0, 0);
@@ -581,8 +529,7 @@ function initializePortfolio() {
   }
   animate();
 
-    // Handle resize
-    window.addEventListener('resize', () => {
+  window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -596,24 +543,49 @@ function initializePortfolio() {
   const form = document.getElementById('contactForm');
   if (form) {
     const submitButton = form.querySelector('button[type="submit"]');
-    if (submitButton) {
-      form.addEventListener('submit', (e) => {
-    e.preventDefault();
     
-    // Add loading state
-    submitButton.textContent = 'Sending...';
-    submitButton.disabled = true;
+    if (submitButton) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Sending...';
+        submitButton.disabled = true;
 
-    // Simulate form submission
-    setTimeout(() => {
-      submitButton.textContent = 'Message sent!';
-      form.reset();
-      
-      setTimeout(() => {
-        submitButton.textContent = 'Send message';
-        submitButton.disabled = false;
-      }, CONFIG.FORM_SUCCESS_DISPLAY_TIME);
-    }, CONFIG.FORM_SUBMIT_DELAY);
+        try {
+          const formData = new FormData(form);
+          const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            submitButton.textContent = 'Message sent!';
+            form.reset();
+            
+            setTimeout(() => {
+              submitButton.textContent = originalText;
+              submitButton.disabled = false;
+            }, CONFIG.FORM_SUCCESS_DISPLAY_TIME);
+          } else {
+            const data = await response.json();
+            throw new Error(data.error || 'Form submission failed');
+          }
+        } catch (error) {
+          if (error.message && error.message.includes('reCAPTCHA')) {
+            submitButton.textContent = 'Please disable reCAPTCHA in Formspree settings';
+          } else {
+            submitButton.textContent = 'Error. Try again.';
+          }
+          
+          setTimeout(() => {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+          }, 5000);
+        }
       });
     }
   }
@@ -627,7 +599,6 @@ function initializePortfolio() {
       e.preventDefault();
       const target = document.querySelector(anchor.getAttribute('href'));
       if (target) {
-        // Add a subtle scale animation to the target section
         gsap.fromTo(target, 
           { scale: CONFIG.SCALE_LARGE, opacity: CONFIG.OPACITY_SEMI },
           { scale: CONFIG.SCALE_FULL, opacity: CONFIG.OPACITY_VISIBLE, duration: CONFIG.ANIMATION_DURATION_MEDIUM, ease: CONFIG.EASING_POWER2 }
@@ -650,7 +621,6 @@ function initializePortfolio() {
   const splitTextElements = document.querySelectorAll('[data-split-text]');
   
   splitTextElements.forEach(element => {
-    // Skip if element contains accent class children (preserve them)
     if (element.querySelector('.accent')) {
       return;
     }
@@ -704,27 +674,18 @@ function initializePortfolio() {
     yearElement.textContent = new Date().getFullYear();
   }
   
-  // ========================================
-  // Remove loading state
-  // ========================================
-  
-  // Remove loading class after a short delay to ensure everything is rendered
   setTimeout(() => {
     document.body.classList.remove('loading');
   }, CONFIG.INIT_DELAY_MEDIUM);
 }
 
-// Wait for all scripts to load
 window.addEventListener('load', () => {
-  // Initialize after a small delay to ensure everything is ready
   setTimeout(() => {
     initializePortfolio();
   }, CONFIG.INIT_DELAY_SHORT);
 });
 
-// Also try DOMContentLoaded as a fallback
 document.addEventListener('DOMContentLoaded', () => {
-  // If window.load hasn't fired after delay, initialize anyway
   setTimeout(() => {
     if (!window.portfolioInitialized) {
       window.portfolioInitialized = true;
