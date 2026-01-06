@@ -355,11 +355,6 @@ a:hover {
   width: 100%;
 }
 
-/* Theme Toggle */
-.theme-toggle {
-  display: none; /* Removed for dark-only theme */
-}
-
 /* ========================================
    Floating Glass Navigation
    ======================================== */
@@ -1399,35 +1394,47 @@ textarea {
   
   .hero {
     grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: var(--space-xl);
+  }
+  
+  .hero-inner {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+    text-align: center;
+  }
+
+  .eyebrow {
+    justify-content: center;
   }
   
   .hero-visual {
     display: none;
   }
-  
-  .services-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: var(--space-sm);
-    padding: 0 var(--space-md) var(--space-lg);
-    margin: 0 calc(var(--space-md) * -1);
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  .cta-row {
+    justify-content: center;
   }
 
-  .services-grid::-webkit-scrollbar {
-    display: none;
+  /* Services - Vertical Stack for Mobile */
+  .services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: 0 var(--space-md);
+    margin: 0;
+    overflow: visible;
   }
-  
+
   .service-card,
   .service-card.large,
   .service-card.wide {
-    grid-column: span 12;
-    min-width: 85vw;
-    scroll-snap-align: start;
-    padding: var(--space-md);
-    border-radius: 24px;
+    grid-column: auto;
+    width: 100%;
+    min-width: 0;
+    padding: var(--space-lg) var(--space-md);
+    border-radius: 16px;
     transform: none !important;
   }
   
@@ -1437,46 +1444,88 @@ textarea {
 
   .service-card p {
     font-size: 0.95rem;
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
   }
   
   .service-number {
     position: static;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 1.5rem;
+    display: inline-block;
+    font-size: 2rem;
     margin-bottom: var(--space-sm);
-    background: rgba(212, 175, 55, 0.08);
     color: var(--color-gold);
+    opacity: 0.5;
   }
   
   .service-list {
     gap: 0.5rem;
+    justify-content: flex-start;
   }
   
+  /* Projects - Stack vertically on mobile */
+  .projects {
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: visible;
+    padding: 0 var(--space-md);
+    height: auto;
+  }
+
+  .projects::before,
+  .projects::after {
+    display: none;
+  }
+
+  .projects-track {
+    flex-direction: column;
+    animation: none;
+    width: 100%;
+  }
+
+  .project {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    margin-bottom: var(--space-md);
+  }
+
+  .card-media {
+    height: 250px;
+  }
+
+  /* Experience - Elegant Cards */
   .experience-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
     padding: 0 var(--space-md);
   }
   
   .experience-card,
   .experience-card.large,
   .experience-card.wide {
-    grid-column: span 12;
+    grid-column: auto;
     transform: none !important;
     width: 100%;
     max-width: none;
-    aspect-ratio: auto;
-    border-radius: 28px;
+    height: auto;
+    min-height: auto;
+    aspect-ratio: unset;
+    border-radius: 16px;
     align-items: flex-start;
-    justify-content: center;
-    padding: var(--space-lg) var(--space-md);
+    justify-content: flex-start;
+    padding: var(--space-lg);
     margin: 0;
+    border: 1px solid rgba(247, 243, 240, 0.1);
+    background: rgba(26, 26, 26, 0.5);
+  }
+
+  .experience-card:nth-child(n) {
+    grid-column: auto;
+    transform: none !important;
+  }
+
+  .experience-card::before {
+    display: none; /* Remove rotating border on mobile */
   }
 
   .circle-content {
@@ -1484,63 +1533,73 @@ textarea {
     text-align: left;
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
     align-items: flex-start;
+    width: 100%;
   }
 
   .experience-card .year {
     position: static;
     transform: none;
-    font-size: 2.25rem;
+    font-size: 1.5rem;
     margin-bottom: var(--space-xs);
-    align-self: flex-start;
+    color: var(--color-gold);
+    opacity: 0.8;
   }
 
   .experience-card h3 {
     margin-top: 0;
     font-size: 1.25rem;
+    margin-bottom: 0.25rem;
   }
 
   .experience-card .company {
     font-size: 0.75rem;
     letter-spacing: 0.08em;
+    margin-bottom: var(--space-sm);
   }
 
   .experience-card p {
     font-size: 0.95rem;
-    margin-bottom: 0;
+    margin-bottom: var(--space-md);
   }
   
   .tech-stack {
     gap: 0.5rem;
+    justify-content: flex-start;
   }
   
+  /* General Spacing */
+  .section {
+    padding: var(--space-xl) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-lg);
+    text-align: left;
+  }
+  
+  .offset-header {
+    text-align: left;
+  }
+  
+  .offset-header .section-subtitle {
+    margin-left: 0;
+  }
+
   .about {
     grid-template-columns: 1fr;
-    text-align: center;
+    text-align: left;
+    gap: var(--space-lg);
   }
   
   .avatar {
-    max-width: 200px;
-    margin: 0 auto;
+    max-width: 150px;
+    margin: 0;
   }
 
   .social {
-    gap: var(--space-sm);
-  }
-
-  .social a {
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
-  /* Mobile-specific active state for social links */
-  .social a:active {
-    transform: scale(0.95);
-    background: var(--color-ivory);
-    color: var(--color-black);
+    justify-content: flex-start;
   }
 }
 
