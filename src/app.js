@@ -305,7 +305,7 @@ function initializePortfolio() {
 
   const projectsContainer = document.querySelector('.projects');
   
-  if (projectsContainer) {
+  if (projectsContainer && window.innerWidth > 768) {
     const projects = projectsContainer.querySelectorAll('.project');
     const projectsArray = Array.from(projects);
     

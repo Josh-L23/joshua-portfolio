@@ -1486,10 +1486,30 @@ textarea {
     min-width: 0;
     width: 100%;
     margin-bottom: var(--space-md);
+    height: auto;
+    min-height: 0;
   }
 
   .card-media {
-    height: 250px;
+    height: 200px;
+  }
+  
+  .card-body {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    background: transparent;
+    padding-top: var(--space-sm);
+  }
+  
+  .card-media::before {
+    display: none;
+  }
+  
+  .project:hover .card-media img {
+    transform: none;
+    filter: none;
   }
 
   /* Experience - Elegant Cards */
